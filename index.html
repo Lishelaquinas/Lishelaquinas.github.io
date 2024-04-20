@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub Portfolio</title>
+  <style>
+    /* Basic CSS styles */
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .repo-list {
+      list-style-type: none;
+      padding: 0;
+    }
+    .repo-item {
+      margin-bottom: 10px;
+    }
+    .repo-link {
+      display: block;
+      text-decoration: none;
+      color: #0366d6;
+      font-weight: bold;
+    }
+    .repo-description {
+      font-size: 14px;
+      color: #586069;
+    }
+  </style>
+</head>
+<body>
+  <h1>My GitHub Portfolio</h1>
+  <ul id="repoList" class="repo-list">
+    <!-- Repositories will be dynamically added here -->
+  </ul>
+
+  <!-- JavaScript to fetch and display repository information -->
+  <script>
+    // Function to fetch repository data from GitHub API
+    async function fetchRepos() {
+      const response = await fetch('https://api.github.com/users/Lishelaquinas/repos');
+      const data = await response.json();
+      return data;
+    }
+
+    // Function to display repository information
+    async function displayRepos() {
+      const repoList = document.getElementById('repoList');
+      repoList.innerHTML = ''; // Clear previous content
+
+      const repos = await fetchRepos();
+      repos.forEach(repo => {
+        const repoItem = document.createElement('li');
+        repoItem.className = 'repo-item';
+
+        const repoLink = document.createElement('a');
+        repoLink.className = 'repo-link';
+        repoLink.href = repo.html_url;
+        repoLink.textContent = repo.name;
+
+        const repoDescription = document.createElement('p');
+        repoDescription.className = 'repo-description';
+        repoDescription.textContent = repo.description || 'No description provided';
+
+        repoItem.appendChild(repoLink);
+        repoItem.appendChild(repoDescription);
+        repoList.appendChild(repoItem);
+      });
+    }
+
+    // Call displayRepos function to load repositories when the page loads
+    displayRepos();
+  </script>
+</body>
+</html>
